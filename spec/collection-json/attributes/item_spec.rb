@@ -12,7 +12,7 @@ describe CollectionJSON::Item do
       data: [{name: 'full-name', value: 'phil'}],
       inline: {
         'test_inline_href' => {
-          collection: { 
+          'collection' => { 
             href: '/inline',
             links: [{href: '/place'}],
             inline: {},

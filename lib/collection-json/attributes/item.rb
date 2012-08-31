@@ -18,7 +18,7 @@ module CollectionJSON
     attribute :inline,
               transform:  lambda { |inline|
                             inline.each.inject({}) do |collector, (key, value)|
-                              collector[key] = Collection.from_hash(value[ROOT_NODE.to_sym])
+                              collector[key] = Collection.from_hash(value[ROOT_NODE])
                               collector
                             end
                            }
