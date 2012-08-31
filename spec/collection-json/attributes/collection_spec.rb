@@ -6,13 +6,7 @@ describe CollectionJSON::Collection do
     collection = CollectionJSON::Collection.from_hash({
       href: '/',
       links: [{href: '/place'}],
-      items: [{ data: [{name: 'full-name', value: 'phil'}] }],
-      inline: { href_name: { href: '/inline',
-                             links: [{href: '/place'}],
-                             inline: {},
-                             data: [{name: 'full-name', value: 'phil'}]
-                            }
-        }
+      items: [{ data: [{name: 'full-name', value: 'phil'}] }]
       })
     collection.to_json.class.should eq(String)
   end

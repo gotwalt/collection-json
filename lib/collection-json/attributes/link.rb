@@ -7,5 +7,6 @@ module CollectionJSON
     attribute :name
     attribute :render
     attribute :prompt
+    attribute :inline
   end
 end

@@ -22,13 +22,6 @@ module CollectionJSON
               transform:  lambda { |queries| queries.each.map { |q| Query.from_hash(q) }},
               default:    [],
               find_method:    :query
-    attribute :inline,
-              transform:  lambda { |inline|
-                            inline.each.inject({}) do |collector, (key, value)|
-                              collector[key] = self.from_hash(value)
-                              collector
-                            end
-                           }
     attribute :template, transform: lambda { |template| Template.from_hash(template) }
     attribute :error, transform: lambda { |error| Error.from_hash(error) }
   end
