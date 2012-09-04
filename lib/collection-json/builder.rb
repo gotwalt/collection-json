@@ -19,10 +19,28 @@ module CollectionJSON
         if block_given?
           data = []
           links = []
-          item_builder = ItemBuilder.new(data, links)
+          inline = {}
+          item_builder = ItemBuilder.new(data, links, inline)
           yield(item_builder)
           item.data data
           item.links links
+          item.inline inline
+        end
+      end
+    end
+    
+    def add_inline(href, params = {}, &block)
+      params.merge!({'href' => href})
+      @collection.inline << Inline.from_hash(params).tap do |item|
+        if block_given?
+          data = []
+          links = []
+          inline = {}
+          inline_builder = InlineBuilder.new(data, links, inline)
+          yield(inline_builder)
+          item.data data
+          item.links links
+          item.inline inline
         end
       end
     end
@@ -49,11 +67,12 @@ module CollectionJSON
   end
 
   class ItemBuilder
-    attr_reader :data, :links
+    attr_reader :data, :links, :inline
 
-    def initialize(data, links)
+    def initialize(data, links, inline)
       @data = data
       @links = links
+      @inline = inline
     end
 
     def add_data(name, params = {})
@@ -65,8 +84,38 @@ module CollectionJSON
       params.merge!({'rel' => rel, 'href' => href})
       links << params
     end
+    
+    def add_inline(href, links, data, inline, params = {})
+      params.merge!({'href' => href, 'links' => links, 'data' => data, 'inline' => inline})
+      inline << params
+    end
   end
+  
+  class InlineBuilder
+    attr_reader :data, :links, :inline
 
+    def initialize(data, links, inline)
+      @data = data
+      @links = links
+      @inline = inline
+    end
+
+    def add_data(name, params = {})
+      params.merge!({'name' => name})
+      data << params
+    end
+
+    def add_link(href, rel, params = {})
+      params.merge!({'rel' => rel, 'href' => href})
+      links << params
+    end
+
+    def add_inline(href, links, data, inline, params = {})
+      params.merge!({'href' => href, 'links' => links, 'data' => data, 'inline' => inline})
+      inline << params
+    end
+  end
+      
   class QueryBuilder
     attr_reader :data
 
